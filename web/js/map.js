@@ -165,16 +165,19 @@ function calgaryGreenRoof () {
                                 
 
                 }).responseText;
-                moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
+                moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);   
+                
                 //alert(moduleObjectResponse.moduleDepth);
                 sortedObj = sortObject(moduleObjectResponse);
                 console.log(moduleObjectResponse );
                 var arrayOfDates = [];
+                var arrayOfValues = [];
                 $.each(sortedObj, function(key, value){
                     if (key === "weightsMap"){
                         $.each(sortedObj.weightsMap, function(keyWM, valueWM){
-                            alert(keyWM + ": " + valueWM); 
-                            arrayOfDates.push('{'+keyWM+'}');
+                            //alert(keyWM + ": " + valueWM); 
+                            arrayOfDates.push(keyWM);
+                            arrayOfValues.push(valueWM);
                         });
                     }
                     else {
@@ -182,11 +185,17 @@ function calgaryGreenRoof () {
                     }
                 });    
                 console.log(arrayOfDates);
-                alert("Now data in array");
-                alert(arrayOfDates[0]);
-                alert(arrayOfDates[1]);
-                alert(arrayOfDates[2]);
-                alert(arrayOfDates[3]);
+                console.log("------------");
+                for (var i = 0; i < arrayOfDates.length; i++){
+                    console.log(arrayOfDates[i]);
+                    console.log(arrayOfDates[i].sort());
+                }/*
+                for (var i = 0; i < arrayOfDates.length; i++){
+                    console.log(arrayOfDates[i]);
+                    console.log(arrayOfValues[i]);
+                }*/
+                
+                
 	});
 		
 	function smoothZoom(map, level, cnt, mode) {
