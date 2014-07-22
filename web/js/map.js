@@ -23,20 +23,11 @@ function initialize() {
         
         google.maps.event.addListener(marker, 'click', function () {
         	if (marker.title == 'Calgary') {
-        		map.setZoom(21);
-        	    map.panTo(this.getPosition());
-        		marker.setMap(null);
-        		map.setMapTypeId("satellite");
+        		calgaryGreenRoof();
         	} else if (marker.title == 'London') {
-        		map.setZoom(21);
-        		map.panTo(this.getPosition());
-        		marker.setMap(null);
-        		map.setMapTypeId("satellite");
+				londonGreenRoof();
         	} else if (marker.title == 'Halifax') {
-        		map.setZoom(21);
-        		map.panTo(this.getPosition());
-        		marker.setMap(null);
-        		map.setMapTypeId("satellite");
+				halifaxGreenRoof();
         	}
         });
         
