@@ -1,0 +1,2 @@
+<h1>Tutorial</h1>
+<p>Using Magna Systems is easy. To get started, simply click on the locations on top or the markers seen on the map. This will zoom you right to the green roof location. From here on, you can click (or tap) on the individual green roof modules to visualize their health such as weight, slope, depth, and more.</p>
