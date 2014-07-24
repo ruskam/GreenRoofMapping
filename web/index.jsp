@@ -52,13 +52,13 @@
         </div>
     </footer>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="js/infobox.js"></script>
 <script src="js/globalVar.js"></script>
 <script src="js/map.js"></script>
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script src="js/jquery.ui.touch-punch.min.js"></script>
 <script src="js/charts.min.js"></script>
-<script src="js/infobox.js"></script>
 <script>dialogUI();</script>
 </body>
 </html>
