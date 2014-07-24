@@ -192,36 +192,48 @@ function calgaryGreenRoof () {
             async: false
         }).responseText;
         moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
-        //alert(moduleObjectResponse.moduleDepth);
-        //sortedObj = sortObject(moduleObjectResponse);
-        //console.log(moduleObjectResponse );
-        var arrayOfDates = [];
+        
+        var weights = [];
+        var moduleIDResp;
+        var moduleDepthResp;
+        var speciesResp;
+        var slopeResp;
+        var lifterWeightResp;
+        
         $.each(moduleObjectResponse, function(key, value){
             if (key === "weightsMap"){
                 $.each(moduleObjectResponse.weightsMap, function(keyWM, valueWM){
-                    //alert(keyWM + ": " + valueWM); 
-                    arrayOfDates.push('{'+keyWM+'}');
-
+                    weights.push([keyWM, valueWM]);
                 });
             }
             else {
-                if (key == "moduleID") {
-                    //alert(key);
-                    moduleIDResp = moduleObjectResponse.moduleID;
-                    alert("moduleIDResp: " + moduleIDResp);
+                if (key === "moduleID") {                    
+                    moduleIDResp = moduleObjectResponse.moduleID;                    
                 }
-                //alert(key + ": " + value);
+                else if (key === "moduleDepth") {
+                    moduleDepthResp = moduleObjectResponse.moduleDepth;
+                }
+                else if (key === "species") {
+                    speciesResp = moduleObjectResponse.species;
+                }
+                else if (key === "slope") {
+                    slopeResp = moduleObjectResponse.slope; 
+                }
+                else if (key === "lifterWeight") {
+                    lifterWeightResp = moduleObjectResponse.lifterWeight;
+                }
             }
         });
-     
-        /**
-        console.log(arrayOfDates);
-        alert("Now data in array");
-        alert(arrayOfDates[0]);
-        alert(arrayOfDates[1]);
-        alert(arrayOfDates[2]);
-        alert(arrayOfDates[3]);
-        */
+        /*
+         * This array holds the four latest weighing results starting from
+         * the oldest, namely weights[0] is the oldest and weights[3] is the latest
+         * We can access the values by specifying the index of the array:
+         * weights[index][0] - date of weighing
+         * weights[index][1] - weighing results
+         * 
+         */ 
+        
+        weights.sort();
     });
     
     
