@@ -2,13 +2,14 @@ function initialize() {
     var mapOptions = {
       center: mapCenter,
       zoom: maxZoomOut,
-	  minZoom: 3,
+      minZoom: 3,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       disableDefaultUI: true,
       styles: [{"featureType":"all","stylers":[{"saturation":-100},{"gamma":0.9}]}]
     };
-	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-	
+    
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    
     var i = 0;
     var interval = setInterval(function() {
         var data = greenRoofMarkers[i];
@@ -116,7 +117,27 @@ function drawLineChart() {
 	new Chart(lineChart).Line(lineChartData, options);
 }
 
-function calgaryGreenRoof() {
+function createMarker(latLng, moduleID, icon, map){
+    var marker = new google.maps.Marker({
+        position: latLng,
+        moduleID: moduleID,
+        icon: aIcon,
+        map: map
+    });
+    
+    //var infoWindow = new google.maps.InfoWindow();
+    google.maps.event.addListener(marker, 'click', function(){
+        /*
+        var myHTML = '<h1>' + "Hello there" + '</h1>' +
+                '<strong>' + marker.moduleID[0] + '</strong';
+        infoWindow.setContent(myHTML);
+        infoWindow.open(map, marker);  
+        */
+        infoBubble.open(map, marker);
+    });    
+}
+
+function calgaryGreenRoof () {
     $('.yxu').removeClass('selected');
     $('.yhz').removeClass('selected');
     $('.yyc').addClass('selected');
@@ -129,7 +150,7 @@ function calgaryGreenRoof() {
         disableDefaultUI: true
     };
     var calgaryMap = new google.maps.Map(document.getElementById("map-canvas"), calgaryMapOptions);
-
+    
     var calgaryMarker = new google.maps.Marker({ 
         position: new google.maps.LatLng(51.07995524, -114.12928037),
         icon: aIcon,
@@ -170,10 +191,24 @@ function calgaryGreenRoof() {
 	
 	// InfoBubble.js
     /*var infoBubble = new InfoBubble({
+    //function createMarker(latLng, moduleID, icon, map){
+    
+    var module, i, latLng;
+    //infoWindow = new google.maps.InfoWindow();
+    for (i in moduleList) {
+        module = moduleList[i];
+        latLng = new google.maps.LatLng(module.latLng[0], module.latLng[1]);
+        var marker = createMarker(latLng, module.moduleID[0], aIcon, calgaryMap);
+        
+    }
+    
+    
+    var moduleIDResp = "TEST";
+    infoBubble = new InfoBubble({
             maxWidth: 223,
             content: '<div class="specie-popup">' + 
             '<div class="specie-bg">' + 
-            '<div class="specie-name">1. Aquilegia</div>' + '<div class="specie-depth">Depth: 4’’</div>' +
+            '<div class="specie-name">1. Aquilegia</div>' + '<div class="specie-depth">Depth: 4’’' + moduleIDResp + '</div>' +
             '<div class="specie-weight-holder"><div class="specie-weight">19.1</div><div class="specie-unit">kg</div></div>' +
             '<div class="specie-slope">Slope: —</div></div>' +
             '<div class="specie-content">' + 
@@ -239,6 +274,7 @@ function calgaryGreenRoof() {
         var moduleObject = {
             moduleID: 1
         };
+
 	    var d1, d2, d3, d4;
 	    //alert("test");
 	    var rawJSONResponse = $.ajax({
@@ -283,6 +319,59 @@ function calgaryGreenRoof() {
 	    alert(arrayOfDates[2]);
 	    alert(arrayOfDates[3]);
 	});
+        
+        var rawJSONResponse = $.ajax({
+            //moduleObjectStr = JSON.stringify(moduleObject);
+            url: 'bringModule',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(moduleObject),
+            async: false
+        }).responseText;
+        moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
+        
+        var weights = [];
+        var moduleIDResp;
+        var moduleDepthResp;
+        var speciesResp;
+        var slopeResp;
+        var lifterWeightResp;
+        
+        $.each(moduleObjectResponse, function(key, value){
+            if (key === "weightsMap"){
+                $.each(moduleObjectResponse.weightsMap, function(keyWM, valueWM){
+                    weights.push([keyWM, valueWM]);
+                });
+            }
+            else {
+                if (key === "moduleID") {                    
+                    moduleIDResp = moduleObjectResponse.moduleID;                    
+                }
+                else if (key === "moduleDepth") {
+                    moduleDepthResp = moduleObjectResponse.moduleDepth;
+                }
+                else if (key === "species") {
+                    speciesResp = moduleObjectResponse.species;
+                }
+                else if (key === "slope") {
+                    slopeResp = moduleObjectResponse.slope; 
+                }
+                else if (key === "lifterWeight") {
+                    lifterWeightResp = moduleObjectResponse.lifterWeight;
+                }
+            }
+        });
+        /*
+         * This array holds the four latest weighing results starting from
+         * the oldest, namely weights[0] is the oldest and weights[3] is the latest
+         * We can access the values by specifying the index of the array:
+         * weights[index][0] - date of weighing
+         * weights[index][1] - weighing results
+         * 
+         */ 
+        
+        weights.sort();
+    });
 }
 
 function londonGreenRoof() {
@@ -311,7 +400,7 @@ function londonGreenRoof() {
 
 function halifaxGreenRoof() {
     $('.yyc').removeClass('selected');
-	$('.yxu').removeClass('selected');
+    $('.yxu').removeClass('selected');
     $('.yhz').addClass('selected');
 	
 	var halifaxMapOptions = {

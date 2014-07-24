@@ -24,3 +24,18 @@ var greenRoofIcon = new google.maps.MarkerImage("imgs/map-pin.png", null, null, 
 var aIcon = new google.maps.MarkerImage("imgs/aquilegia-marker.png", null, null, null, new google.maps.Size(16,16));
 // js object to hold json response from the server
 var moduleObjectReseponse = {};
+
+// array to store coordinates and IDs of modules to create markers
+var moduleList = [
+    {latLng: [51.07995524, -114.129295], moduleID: "1"},
+    {latLng: [51.07995524, -114.129265], moduleID: "2"}    
+]
+
+/**var infoBubble;
+
+var moduleIDResp;
+     var moduleDepthResp;
+     var speciesResp;
+     var slope;
+     var lifterWeight;
+     */
