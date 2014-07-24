@@ -1,5 +1,4 @@
 <!doctype html>
-<!--<%@page contentType="text/html" pageEncoding="UTF-8"%>-->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -37,26 +36,29 @@
 	<div id="map-canvas"> </div>
     <footer>
         <div class="credits">
-			<span class="developer">Developed by <a class="author" href="index.jsp"><strong>Magna Systems</strong></a></span>
+			<span class="developer">Developed by <a href="index.jsp"><strong>Magna Systems</strong></a></span>
 		</div>
         <div class="links">
 			<ul class="info">
-				<li><a class="modal fancybox.ajax" href="disclaimer.jsp">Disclaimer</a></li>
-				<li><a class="modal fancybox.ajax" href="tutorial.jsp">Tutorial</a></li>
-				<li><a class="modal fancybox.ajax" href="about.jsp">About</a></li>
+				<li><a class="open-disclaimer" href="javascript:void(0);">Disclaimer</a></li>
+				<li><a class="open-tutorial" href="javascript:void(0);">Tutorial</a></li>
+				<li><a class="open-about" href="javascript:void(0);">About</a></li>
 			</ul>
         </div>
+        <div id="disclaimer" title="Disclaimer"><p>At the moment, this application is intended for research purposes ONLY. We do not generate any profits, or share data with other organizations. If you are concerned with the material seen in this application, please contact us and we will be happy to discuss it.</p></div>
+        <div id="about" title="About"><p>Magna Systems is an experimental Google Maps API based web mapping application for monitoring world’s built and natural assets. It is developed by <a class="author" href="http://rustam.io" target="_blank">Rustam Kamberov</a> and <a class="author" href="http://bilalkarim.com" target="_blank">Bilal Karim</a>. We believe in making information accessible through rich, unique and interactive interfaces that utilize the power of maps.</p><p>Our first application is targeted towards researchers engaged in monitoring the health of green roof research projects across Canada from the University of Calgary, University of Western Ontario, and Saint Mary’s University.</p><p>We envision to continue developing this platform to support industries such as oil and gas, forestry, and more.</p>
+        </div>
+        <div id="tutorial" title="Tutorial"><p>Using Magna Systems is easy. To get started, simply click on the locations on top or the markers seen on the map. This will zoom you right to the green roof location. From here on, you can click (or tap) on the individual green roof modules to visualize their health such as weight, slope, depth, and more.</p>
+        </div>
     </footer>
-<script src="js/jquery-1.11.1.min.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="js/globalVar.js"></script>
 <script src="js/map.js"></script>
-<script src="js/infobubble.js"></script>
-<script src="js/jquery.fancybox.pack.js"></script>
-<script>
-$(document).ready(function() {
-	$(".modal").fancybox({ maxWidth: 800, maxHeight: 600, fitToView: false, width: '60%', height: '60%', autoSize: false, closeClick: true, openEffect: 'none', closeEffect: 'none' });
-});    
-</script>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery.ui.touch-punch.min.js"></script>
+<script src="js/charts.min.js"></script>
+<script src="js/infobox.js"></script>
+<script>dialogUI();</script>
 </body>
 </html>

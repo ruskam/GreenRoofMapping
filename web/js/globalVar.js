@@ -1,8 +1,11 @@
 var map;
 var mapCenter = new google.maps.LatLng(56.646563, -92.460937);
-var maxZoomIn = 21; //22
+var maxZoomIn = 21;
 var maxZoomOut = 4;
 var calgaryMap;
+var londonMap;
+var halfiaxMap;
+var infoBubble;
 var greenRoofMarkers = [
     { "title": "Calgary",
       "lat": "51.08003234",

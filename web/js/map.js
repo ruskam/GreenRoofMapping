@@ -10,7 +10,7 @@ function initialize() {
 	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 	
     var i = 0;
-    var interval = setInterval(function () {
+    var interval = setInterval(function() {
         var data = greenRoofMarkers[i];
         var myLatlng = new google.maps.LatLng(data.lat, data.lng);
         var marker = new google.maps.Marker({
@@ -21,7 +21,7 @@ function initialize() {
             animation: google.maps.Animation.DROP
         });
         
-        google.maps.event.addListener(marker, 'click', function () {
+        google.maps.event.addListener(marker, 'click', function() {
         	if (marker.title == 'Calgary') {
         		calgaryGreenRoof();
         	} else if (marker.title == 'London') {
@@ -62,7 +62,61 @@ function sortObject(o) {
     return sorted;
 }
 
-function calgaryGreenRoof () {
+function dialogUI() {
+	var options = { autoOpen: false, modal: true, width: '50%', height: 'auto', resizable: false, closeOnEscape: true, dialogClass: 'dropShadow' };
+	$('.open-disclaimer').click(function() { $('#disclaimer').dialog(options).dialog('open'); });
+	$('.open-about').click(function(){ $('#about').dialog(options).dialog('open'); });
+	$('.open-tutorial').click(function(){ $('#tutorial').dialog(options).dialog('open'); });
+	$('#lineGraph').dialog({width:'283px', height:'auto', dialogClass: 'dropShadow', position: { my: "left", at: "right+10", of: ".specie-popup" } });
+}
+
+function drawLineChart() {
+	var lineChartData = {
+		labels: ["M","T","W","T","F", "S", "S"],
+		datasets: [{
+			label: "Week 1",
+			fillColor: "rgba(220,220,220,0.2)",
+			strokeColor: "rgba(220,220,220,1)",
+			pointColor: "rgba(220,220,220,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(220,220,220,1)",
+			data:[19.1, 18.8, 18.6, 19.2, 19.5, 19.3, 18.9]
+		},{
+			label: "Week 2",
+			fillColor: "rgba(151,187,205,0.2)",
+			strokeColor: "rgba(151,187,205,1)",
+			pointColor: "rgba(151,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: [19.4, 18.6, 18.7, 19.2, 18.9, 19.8, 18.8]
+		}]
+	};
+	var options = {
+		animation: true,
+		animationSteps: 40,
+		animationEasing: "easeOutQuart",
+		scaleIntegersOnly: false,
+		scaleShowGridLines: true,
+		scaleGridLineColor: "rgba(0,0,0,.05)",
+		scaleGridLineWidth: 1,
+		bezierCurve: true,
+		bezierCurveTension: 0.5,
+		pointDot: true,
+		pointDotRadius: 4,
+		pointDotStrokeWidth: 2,
+		pointHitDetectionRadius: 20,
+		datasetStroke: true,
+		datasetStrokeWidth: 2,
+		datasetFill: true,
+		legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+	};
+	var lineChart = document.getElementById("chartjs").getContext("2d");
+	new Chart(lineChart).Line(lineChartData, options);
+}
+
+function calgaryGreenRoof() {
     $('.yxu').removeClass('selected');
     $('.yhz').removeClass('selected');
     $('.yyc').addClass('selected');
@@ -79,10 +133,43 @@ function calgaryGreenRoof () {
     var calgaryMarker = new google.maps.Marker({ 
         position: new google.maps.LatLng(51.07995524, -114.12928037),
         icon: aIcon,
+        moduleID: 1,
         map: calgaryMap
     });
 	
-    infoBubble = new InfoBubble({
+   	// InfoBox.js
+   	var boxText = document.createElement("div");
+   	boxText.className = "specie-popup";
+   	boxText.innerHTML = 
+        '<div class="specie-bg">' + 
+        '<div class="specie-name">1. Aquilegia</div>' + '<div class="specie-depth">Depth: 4’’</div>' +
+        '<div class="specie-weight-holder"><div class="specie-weight">19.1</div><div class="specie-unit">kg</div></div>' +
+        '<div class="specie-slope">Slope: —</div></div>' +
+        '<div class="specie-content">' + 
+        '<div class="weather">T: 18&deg;C</div>' + 
+        '<div class="uv-index">UV: 6</div></div>' + 
+        '<div class="graph-button"><a onclick="dialogUI();" href="javascript:void(0);"><img src="imgs/graph-icon.png" height="32px" width="32px" alt="Launch Graph" title="Launch Graph"/></a></div>' +
+        '<div id="lineGraph" title="Trends"><canvas id="chartjs" height="171" width="250"></canvas></div>' +
+        '<div class="specie-date">July 20, 2014</div>';
+		
+	var myOptions = {
+		content: boxText,
+		disableAutoPan: false,
+		alignBottom: true,
+		pixelOffset: new google.maps.Size(-115, -35),
+		zIndex: null,
+		closeBoxMargin: "21px 13px 0px",
+		closeBoxURL: "imgs/close-button.png",
+		infoBoxClearance: new google.maps.Size(1, 1),
+		isHidden: false,
+		pane: "floatPane",
+		enableEventPropagation: false
+	};
+
+	var infoBubble = new InfoBox(myOptions);
+	
+	// InfoBubble.js
+    /*var infoBubble = new InfoBubble({
             maxWidth: 223,
             content: '<div class="specie-popup">' + 
             '<div class="specie-bg">' + 
@@ -92,20 +179,22 @@ function calgaryGreenRoof () {
             '<div class="specie-content">' + 
             '<div class="weather">T: 18&deg;C</div>' + 
             '<div class="uv-index">UV: 6</div></div>' + 
-            '<div class="graph"><a href="javascript:void(0);"><img src="imgs/graph-icon.png" height="32px" width="32px" alt="Launch Graph" title="Launch Graph"/></a></div>' +
+            '<div class="graph-button"><a onclick="dialogUI();" href="javascript:void(0);"><img src="imgs/graph-icon.png" height="32px" width="32px" alt="Launch Graph" title="Launch Graph"/></a></div>' +
+            '<div id="lineGraph" title="Trends"><canvas id="test" height="171px" width="250px"></canvas></div>' +
             '<div class="specie-date">July 20, 2014</div>' + 
             '</div>',
-            position: new google.maps.LatLng(51.079992, -114.129111),
+            position: new google.maps.LatLng(51.07995524, -114.12928037),
             shadowStyle: 1,
             padding: 0,
             backgroundColor: '#FFF',
             borderRadius: 0,
             arrowSize: 16,
             disableAutoPan: true,
+            disableAnimation: true,
             hideCloseButton: false,
             arrowPosition: 50,
             arrowStyle: 0
-    });
+    });*/
 	
     var yycStudyArea = [
             new google.maps.LatLng(51.080024,-114.129298),
@@ -141,61 +230,62 @@ function calgaryGreenRoof () {
     };
     var studyAreaPoly = new google.maps.Polygon(polyOptions);
     studyAreaPoly.setMap(calgaryMap);
-	
+    
+    google.maps.event.addListener(infoBubble, 'domready', function() { drawLineChart(); });
+    
     google.maps.event.addListener(calgaryMarker, 'click', function() {
         infoBubble.open(calgaryMap, calgaryMarker);
+          
         var moduleObject = {
             moduleID: 1
         };
-
-    var d1, d2, d3, d4;
-
-    //alert("test");
-    var rawJSONResponse = $.ajax({
-        //moduleObjectStr = JSON.stringify(moduleObject);
-        url: 'bringModule',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify(moduleObject),
-        async: false
-
-        //success: function(data){
-        //$.each(data, function(key, value){
-            //if (key == "weightsMap"){
-                //$.each(data.weightsMap, function(keyWM, valueWM){
-                //alert(keyWM + ": " + valueWM); 
-            //})
-        //alert("key == weightsMap" + " bingo");
-
-    }).responseText;
-    moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
-    //alert(moduleObjectResponse.moduleDepth);
-    sortedObj = sortObject(moduleObjectResponse);
-    console.log(moduleObjectResponse );
-    var arrayOfDates = [];
-    $.each(sortedObj, function(key, value){
-        if (key === "weightsMap"){
-            $.each(sortedObj.weightsMap, function(keyWM, valueWM){
-                alert(keyWM + ": " + valueWM); 
-                arrayOfDates.push('{'+keyWM+'}');
-
-            });
-        }
-        else {
-            //alert(key + ": " + value);
-        }
-    });
-
-    console.log(arrayOfDates);
-    alert("Now data in array");
-    alert(arrayOfDates[0]);
-    alert(arrayOfDates[1]);
-    alert(arrayOfDates[2]);
-    alert(arrayOfDates[3]);
-    });
+	    var d1, d2, d3, d4;
+	    //alert("test");
+	    var rawJSONResponse = $.ajax({
+	        //moduleObjectStr = JSON.stringify(moduleObject);
+	        url: 'bringModule',
+	        type: 'POST',
+	        dataType: 'json',
+	        data: JSON.stringify(moduleObject),
+	        async: false
+	
+	        //success: function(data){
+	        //$.each(data, function(key, value){
+	            //if (key == "weightsMap"){
+	                //$.each(data.weightsMap, function(keyWM, valueWM){
+	                //alert(keyWM + ": " + valueWM); 
+	            //})
+	        //alert("key == weightsMap" + " bingo");
+	
+	    }).responseText;
+	    moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
+	    //alert(moduleObjectResponse.moduleDepth);
+	    sortedObj = sortObject(moduleObjectResponse);
+	    console.log(moduleObjectResponse );
+	    var arrayOfDates = [];
+	    $.each(sortedObj, function(key, value){
+	        if (key === "weightsMap"){
+	            $.each(sortedObj.weightsMap, function(keyWM, valueWM){
+	                alert(keyWM + ": " + valueWM); 
+	                arrayOfDates.push('{'+keyWM+'}');
+	
+	            });
+	        }
+	        else {
+	            //alert(key + ": " + value);
+	        }
+	    });
+	
+	    console.log(arrayOfDates);
+	    alert("Now data in array");
+	    alert(arrayOfDates[0]);
+	    alert(arrayOfDates[1]);
+	    alert(arrayOfDates[2]);
+	    alert(arrayOfDates[3]);
+	});
 }
 
-function londonGreenRoof () {
+function londonGreenRoof() {
     $('.yyc').removeClass('selected');
     $('.yhz').removeClass('selected');
 	$('.yxu').addClass('selected');
@@ -219,7 +309,7 @@ function londonGreenRoof () {
 	});
 }
 
-function halifaxGreenRoof () {
+function halifaxGreenRoof() {
     $('.yyc').removeClass('selected');
 	$('.yxu').removeClass('selected');
     $('.yhz').addClass('selected');
