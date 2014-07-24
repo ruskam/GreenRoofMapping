@@ -371,7 +371,7 @@ function calgaryGreenRoof () {
          */ 
         
         weights.sort();
-    });
+    
 }
 
 function londonGreenRoof() {
