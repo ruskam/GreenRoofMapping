@@ -58,7 +58,7 @@
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script src="js/jquery.ui.touch-punch.min.js"></script>
-<script src="js/charts.min.js"></script>
+<script src="js/chart.min.js"></script>
 <script>dialogUI();</script>
 </body>
 </html>

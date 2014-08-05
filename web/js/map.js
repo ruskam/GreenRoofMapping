@@ -48,21 +48,6 @@ function initialize() {
     }
 }
 
-function sortObject(o) {
-    var sorted = {},
-    key, a = [];
-    for (key in o) {
-    	if (o.hasOwnProperty(key)) {
-    		a.push(key);
-    	}
-    }
-    a.sort();
-    for (key = 0; key < a.length; key++) {
-    	sorted[a[key]] = o[a[key]];
-    }
-    return sorted;
-}
-
 function dialogUI() {
 	var options = { autoOpen: false, modal: true, width: '50%', height: 'auto', resizable: false, closeOnEscape: true, dialogClass: 'dropShadow' };
 	$('.open-disclaimer').click(function() { $('#disclaimer').dialog(options).dialog('open'); });
@@ -93,19 +78,77 @@ function drawLineChart() {
 	new Chart(lineChart).Line(lineChartData, options);
 }
 
-google.maps.event.addListener(infoBubble, 'domready', function() { drawLineChart(); });
+function parseJSONObject(rawJSONResponse) {
+    var parsedModuleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
+    return parsedModuleObjectResponse;
+}
 
-function createMarker(latLng, moduleID, icon, map){
-    var marker = new google.maps.Marker({
-        position: latLng,
-        moduleID: moduleID,
-        icon: aIcon,
-        map: map
-    });
+
+function showWeights(marker, map) {
     
     google.maps.event.addListener(marker, 'click', function() {
-        infoBubble.open(map, marker);
-    }); 
+        
+        if (typeof(infoBubble) !== "undefined") {
+            infoBubble.close(map, marker);
+        }
+          
+        var rawJSONResponse = $.ajax({
+            url: 'bringModule',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({moduleID: marker.moduleID}),
+            async: false
+        }).responseText;
+        
+        var moduleObjectResponse = parseJSONObject(rawJSONResponse);
+        
+        var weights = [];
+        var moduleIDResp;
+        var moduleDepthResp;
+        var speciesResp;
+        var slopeResp;
+        var lifterWeightResp;
+
+        $.each(moduleObjectResponse, function(key, value){
+            if (key === "weightsMap"){
+                $.each(moduleObjectResponse.weightsMap, function(keyWM, valueWM){
+                    weights.push([keyWM, valueWM]);
+                });
+            }
+            else {
+                if (key === "moduleID") {                    
+                    moduleIDResp = moduleObjectResponse.moduleID;                    
+                }
+                else if (key === "moduleDepth") {
+                    moduleDepthResp = moduleObjectResponse.moduleDepth;
+                }
+                else if (key === "species") {
+                    speciesResp = moduleObjectResponse.species;
+                }
+                else if (key === "slope") {
+                    slopeResp = moduleObjectResponse.slope; 
+                }
+                else if (key === "lifterWeight") {
+                    lifterWeightResp = moduleObjectResponse.lifterWeight;
+                }
+            }
+        });
+        
+        weights.sort();
+        var latestDate = weights[weights.length - 1][0];
+        var latestWeight = weights[weights.length - 1][1];
+        
+        infoBubble = getInfoBubble(moduleObjectResponse.moduleID, moduleObjectResponse.species,
+            moduleObjectResponse.moduleDepth, moduleObjectResponse.slope, moduleObjectResponse.lifterWeight,
+            latestDate, latestWeight
+        );          
+        infoBubble.open(map, marker);        
+        
+        google.maps.event.addListener(infoBubble, 'domready', function() { 
+            drawLineChart(); 
+        });
+    });
+    
 }
 
 function calgaryGreenRoof () {
@@ -122,20 +165,18 @@ function calgaryGreenRoof () {
     };
     var calgaryMap = new google.maps.Map(document.getElementById("map-canvas"), calgaryMapOptions);
     
-    var calgaryMarker = new google.maps.Marker({ 
-        position: new google.maps.LatLng(51.07995524, -114.12928037),
-        icon: aIcon,
-        moduleID: 1,
-        map: calgaryMap
-    });
-	
-	var module, i, latLng;
-    //infoWindow = new google.maps.InfoWindow();
-    for (i in moduleList) {
-        module = moduleList[i];
-        latLng = new google.maps.LatLng(module.latLng[0], module.latLng[1]);
-        var marker = createMarker(latLng, module.moduleID[0], aIcon, calgaryMap);
+    for (var i = 0 in moduleList) {
+        var module = moduleList[i];
+        var latLng = new google.maps.LatLng(module.latLng[0], module.latLng[1]);
+        //var marker = createMarker(latLng, module.moduleID[0], aIcon, calgaryMap);
+        var marker = new google.maps.Marker({
+            position: latLng,
+            moduleID: module.moduleID,
+            icon: aIcon,
+            map: calgaryMap
+        });
         
+        showWeights(marker, calgaryMap);
     }
 	
     var yycStudyArea = [
@@ -151,158 +192,7 @@ function calgaryGreenRoof () {
     };
     var studyAreaPoly = new google.maps.Polygon(polyOptions);
     studyAreaPoly.setMap(calgaryMap);
-        
-    google.maps.event.addListener(calgaryMarker, 'click', function() {
-        infoBubble.open(calgaryMap, calgaryMarker);
-          
-        var moduleObject = {
-            moduleID: 1
-        };
-
-	    var d1, d2, d3, d4;
-	    //alert("test");
-	    var rawJSONResponse = $.ajax({
-	        //moduleObjectStr = JSON.stringify(moduleObject);
-	        url: 'bringModule',
-	        type: 'POST',
-	        dataType: 'json',
-	        data: JSON.stringify(moduleObject),
-	        async: false
-	
-	        //success: function(data){
-	        //$.each(data, function(key, value){
-	            //if (key == "weightsMap"){
-	                //$.each(data.weightsMap, function(keyWM, valueWM){
-	                //alert(keyWM + ": " + valueWM); 
-	            //})
-	        //alert("key == weightsMap" + " bingo");
-	
-	    }).responseText;
-	    moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
-	    //alert(moduleObjectResponse.moduleDepth);
-	    sortedObj = sortObject(moduleObjectResponse);
-	    console.log(moduleObjectResponse );
-	    var arrayOfDates = [];
-	    $.each(sortedObj, function(key, value){
-	        if (key === "weightsMap"){
-	            $.each(sortedObj.weightsMap, function(keyWM, valueWM){
-	                alert(keyWM + ": " + valueWM); 
-	                arrayOfDates.push('{'+keyWM+'}');
-	
-	            });
-	        }
-	        else {
-	            //alert(key + ": " + value);
-	        }
-	    });
-	
-	    console.log(arrayOfDates);
-	    alert("Now data in array");
-	    alert(arrayOfDates[0]);
-	    alert(arrayOfDates[1]);
-	    alert(arrayOfDates[2]);
-	    alert(arrayOfDates[3]);
-	});
-        
-    var rawJSONResponse = $.ajax({
-        //moduleObjectStr = JSON.stringify(moduleObject);
-        url: 'bringModule',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify(moduleObject),
-        async: false
-    }).responseText;
-    moduleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
     
-    var weights = [];
-    var moduleIDResp;
-    var moduleDepthResp;
-    var speciesResp;
-    var slopeResp;
-    var lifterWeightResp;
-    
-    $.each(moduleObjectResponse, function(key, value){
-        if (key === "weightsMap"){
-            $.each(moduleObjectResponse.weightsMap, function(keyWM, valueWM){
-                weights.push([keyWM, valueWM]);
-            });
-        }
-        else {
-            if (key === "moduleID") {                    
-                moduleIDResp = moduleObjectResponse.moduleID;                    
-            }
-            else if (key === "moduleDepth") {
-                moduleDepthResp = moduleObjectResponse.moduleDepth;
-            }
-            else if (key === "species") {
-                speciesResp = moduleObjectResponse.species;
-            }
-            else if (key === "slope") {
-                slopeResp = moduleObjectResponse.slope; 
-            }
-            else if (key === "lifterWeight") {
-                lifterWeightResp = moduleObjectResponse.lifterWeight;
-            }
-        }
-    });
-    /*
-     * This array holds the four latest weighing results starting from
-     * the oldest, namely weights[0] is the oldest and weights[3] is the latest
-     * We can access the values by specifying the index of the array:
-     * weights[index][0] - date of weighing
-     * weights[index][1] - weighing results
-     * 
-     */ 
-    weights.sort();
-}
-
-function londonGreenRoof() {
-    $('.yyc').removeClass('selected');
-    $('.yhz').removeClass('selected');
-	$('.yxu').addClass('selected');
-	
-	var londonMapOptions = {
-		center: new google.maps.LatLng(43.00761832871958, -81.27059519290924),
-		zoom: maxZoomIn,
-		minZoom: maxZoomIn,
-		mapTypeId: google.maps.MapTypeId.SATELLITE,
-		disableDefaultUI: true
-	};
-	var londonMap = new google.maps.Map(document.getElementById("map-canvas"), londonMapOptions);
-	
-	var londonMarker = new google.maps.Marker({ 
-		position: new google.maps.LatLng(43.00758714245971, -81.27061128616333),
-		icon: greenRoofIcon,
-		map: londonMap
-	});
-		
-	google.maps.event.addListener(londonMarker, 'click', function() {
-	});
-}
-
-function halifaxGreenRoof() {
-    $('.yyc').removeClass('selected');
-    $('.yxu').removeClass('selected');
-    $('.yhz').addClass('selected');
-	
-	var halifaxMapOptions = {
-		center: new google.maps.LatLng(44.63222984132247, -63.58145624399185),
-		zoom: 20,
-		minZoom: 20,
-		mapTypeId: google.maps.MapTypeId.SATELLITE,
-		disableDefaultUI: true
-	};
-	var halifaxMap = new google.maps.Map(document.getElementById("map-canvas"), halifaxMapOptions);
-	
-	var halifaxMarker = new google.maps.Marker({ 
-		position: new google.maps.LatLng(44.632262289944, -63.58146160840988),
-		icon: greenRoofIcon,
-		map: halifaxMap
-	});
-		
-	google.maps.event.addListener(halifaxMarker, 'click', function() {
-	});
-			
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

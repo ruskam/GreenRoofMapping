@@ -32,7 +32,8 @@ public class ModuleDB {
                         + "from modules as m, results as r, weighsession as w " 
                         + "where m.moduleid = r.moduleid " 
                         + "and w.sessionid = r.sessionid "
-                        + "and m.moduleid = ?; ";
+                        + "and m.moduleid = ? "
+                        + "order by w.sessionid asc ;";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, clientModuleID);

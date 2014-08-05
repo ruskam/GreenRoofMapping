@@ -67,6 +67,43 @@ public class BringJavaBean extends HttpServlet {
         
         
     }
+    
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Gson gson = new Gson();
+        
+        try {
+            StringBuilder sb = new StringBuilder();
+            String s = "";
+            while ((s = request.getReader().readLine()) != null) {
+                sb.append(s);
+            }
+            Module clientModule = gson.fromJson(sb.toString(), Module.class);
+            
+            int clientModuleID = clientModule.getModuleID(); 
+            //System.out.println("clientModuleID: " + clientModuleID);
+            
+            Module responseModule = ModuleDB.selectModule(clientModuleID);
+            System.out.println("module on servlet: " + responseModule.toString());
+            String jsonBean = new Gson().toJson(responseModule);
+               
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonBean);
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
     /**
      * Returns a short description of the servlet.
