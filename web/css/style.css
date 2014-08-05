@@ -128,6 +128,9 @@ footer {
     display: none;
     overflow: hidden;
 }
+.size {
+	background-repeat: no-repeat;
+}
 ul {
     list-style-type: none;
     padding: 0;
@@ -189,6 +192,7 @@ p {
 .specie-bg {
     background-image: url('../imgs/aquilegia.jpg');
     background-size: 223px 100px;
+    background-color: #1F8A1E;
     height: 100px;
     color: #FFF;
     border: 3px solid #FFF;
