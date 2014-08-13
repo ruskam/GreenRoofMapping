@@ -13,7 +13,7 @@ function initialize() {
       styles: [{"featureType":"all","stylers":[{"saturation":-100},{"gamma":0.9}]}]
     };
     
-    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
     
     var i = 0;
     var interval = setInterval(function() {

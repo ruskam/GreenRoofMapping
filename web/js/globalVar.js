@@ -1,4 +1,4 @@
-var map;
+//var map;
 
 //var londonMap;
 //var halfiaxMap;
@@ -23,11 +23,32 @@ var moduleList = [
 var infoBubble;
 //var calgaryMap;
 function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
+    
+    if (species === "gr") {
+        species = "Grass";
+    }
+    else if (species == "sed") {
+        species = "Sedum";
+    }
+    else if (species == "aq") {
+        species = "Aquilegia";
+    }
+    else {
+        species = "Mixed";
+    }
+    
+    if (slope === "y") {
+        slope = "yes";
+    }
+    else {
+        slope = "no";
+    }
+    
     var boxText = document.createElement("div");
             boxText.className = "specie-popup";
             boxText.innerHTML = 
         '<div class="specie-bg">' + 
-        '<div class="specie-name">1. ' + species + '</div>' + '<div class="specie-depth">Depth: ' + depth + /*moduleIDResp +*/ '</div>' +
+        '<div class="specie-name">Module #' + id + ': ' + species + '</div>' + '<div class="specie-depth">Depth: ' + depth + /*moduleIDResp +*/ '</div>' +
         '<div class="specie-weight-holder"><div class="specie-weight">' + weight + '</div><div class="specie-unit">kg</div></div>' +
         '<div class="specie-slope">Slope: ' + slope + '</div></div>' +
         '<div class="specie-content">' + 
