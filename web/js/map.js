@@ -1,4 +1,9 @@
 function initialize() {
+    
+    var mapCenter = new google.maps.LatLng(56.306786, -88.769531);
+    
+    var maxZoomOut = 4;
+    
     var mapOptions = {
       center: mapCenter,
       zoom: maxZoomOut,
@@ -48,6 +53,8 @@ function initialize() {
     }
 }
 
+
+
 function dialogUI() {
 	var options = { autoOpen: false, modal: true, width: '50%', height: 'auto', resizable: false, closeOnEscape: true, dialogClass: 'dropShadow' };
 	$('.open-disclaimer').click(function() { $('#disclaimer').dialog(options).dialog('open'); });
@@ -56,42 +63,51 @@ function dialogUI() {
 	$('#lineGraph').dialog({width:'265', height:'240', dialogClass: 'dropShadow', position: { my: "left", at: "right+5", of: ".specie-popup" } });
 }
 
-function drawLineChart() {
-	var lineChartData = {
-		labels: ["M","T","W","T","F", "S", "S"],
-		datasets: [{
-			label: "Week 1",
-			fillColor: "rgba(220,220,220,0.2)",
-			strokeColor: "rgba(220,220,220,1)",
-			pointColor: "rgba(220,220,220,1)",
-			pointStrokeColor: "#fff",
-			pointHighlightFill: "#fff",
-			pointHighlightStroke: "rgba(220,220,220,1)",
-			data:[19.10, 18.90, 18.70, 19.0, 19.30, 18.80, 18.90]
-		}]
-	};
-	
-	var options = {
-		scaleIntegersOnly: false
-	};
-	var lineChart = document.getElementById("chartjs").getContext("2d");
-	new Chart(lineChart).Line(lineChartData, options);
-}
+function drawLineChart(weights) {
+    
+    var lineChartData = {
+        labels: [getDate(weights[0][0]).toString().concat("/",getMonth(weights[0][0]).toString()), 
+            getDate(weights[1][0]).toString().concat("/",getMonth(weights[1][0]).toString()), 
+            getDate(weights[2][0]).toString().concat("/",getMonth(weights[2][0]).toString()), 
+            getDate(weights[3][0]).toString().concat("/",getMonth(weights[3][0]).toString())],
+        datasets: [{
+            label: "Week 1",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [weights[0][1], weights[1][1], weights[2][1], weights[3][1]]
+        }]
+    };
+
+    var options = {
+            scaleIntegersOnly: false
+    };
+    var lineChart = document.getElementById("chartjs").getContext("2d");
+    new Chart(lineChart).Line(lineChartData, options);
+}    
 
 function parseJSONObject(rawJSONResponse) {
     var parsedModuleObjectResponse = jQuery.parseJSON(rawJSONResponse);                
     return parsedModuleObjectResponse;
 }
 
+function getMonth(str) {
+    var month = parseInt(str.substring(4,6));
+    return month;
+}
+
+function getDate(str) {
+    var date = parseInt(str.substring(6,8));
+    return date;
+}
 
 function showWeights(marker, map) {
     
     google.maps.event.addListener(marker, 'click', function() {
         
-        if (typeof(infoBubble) !== "undefined") {
-            infoBubble.close(map, marker);
-        }
-          
         var rawJSONResponse = $.ajax({
             url: 'bringModule',
             type: 'POST',
@@ -135,17 +151,24 @@ function showWeights(marker, map) {
         });
         
         weights.sort();
+        console.log(weights);
+        console.log(getMonth(weights[0][0]));
         var latestDate = weights[weights.length - 1][0];
         var latestWeight = weights[weights.length - 1][1];
         
+        if (infoBubble) {
+            infoBubble.close()
+        };
+        console.log(moduleObjectResponse.moduleID);
         infoBubble = getInfoBubble(moduleObjectResponse.moduleID, moduleObjectResponse.species,
             moduleObjectResponse.moduleDepth, moduleObjectResponse.slope, moduleObjectResponse.lifterWeight,
             latestDate, latestWeight
         );          
-        infoBubble.open(map, marker);        
+       
+        infoBubble.open(map, marker); 
         
-        google.maps.event.addListener(infoBubble, 'domready', function() { 
-            drawLineChart(); 
+        google.maps.event.addListener(infoBubble, 'domready', function() {             
+            drawLineChart(weights); 
         });
     });
     
@@ -156,6 +179,8 @@ function calgaryGreenRoof () {
     $('.yhz').removeClass('selected');
     $('.yyc').addClass('selected');
 	
+    var maxZoomIn = 21;    
+        
     var calgaryMapOptions = {
         center: new google.maps.LatLng(51.080025, -114.129286),
         zoom: maxZoomIn,
