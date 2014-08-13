@@ -174,15 +174,13 @@ function showWeights(marker, map) {
         });
         
         weights.sort();
-        console.log(weights);
-        console.log(getMonth(weights[0][0]));
         var latestDate = weights[weights.length - 1][0];
         var latestWeight = weights[weights.length - 1][1];
         
         if (infoBubble) {
             infoBubble.close()
         };
-        console.log(moduleObjectResponse.moduleID);
+        
         infoBubble = getInfoBubble(moduleObjectResponse.moduleID, moduleObjectResponse.species,
             moduleObjectResponse.moduleDepth, moduleObjectResponse.slope, moduleObjectResponse.lifterWeight,
             latestDate, latestWeight

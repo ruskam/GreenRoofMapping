@@ -52,7 +52,7 @@ function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
         '<div class="specie-weight-holder"><div class="specie-weight">' + weight + '</div><div class="specie-unit">kg</div></div>' +
         '<div class="specie-slope">Slope: ' + slope + '</div></div>' +
         '<div class="specie-content">' + 
-        '<div class="weather">T: 18&deg;C</div>' + 
+        '<div class="weather">18&deg;C</div>' + 
         '<div class="uv-index">UV: 6</div></div>' + 
         '<div class="graph-button"><a onclick="dialogUI();" href="javascript:void(0);"><img src="imgs/graph-icon.png" height="32px" width="32px" alt="Launch Graph" title="Launch Graph"/></a></div>' +
         '<div id="lineGraph" title="Trends"><canvas id="chartjs" width="230" height="172"></canvas></div>' +
