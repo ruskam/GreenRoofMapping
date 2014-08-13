@@ -56,7 +56,7 @@ function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
         '<div class="uv-index">UV: 6</div></div>' + 
         '<div class="graph-button"><a onclick="dialogUI();" href="javascript:void(0);"><img src="imgs/graph-icon.png" height="32px" width="32px" alt="Launch Graph" title="Launch Graph"/></a></div>' +
         '<div id="lineGraph" title="Trends"><canvas id="chartjs" width="230" height="172"></canvas></div>' +
-        '<div class="specie-date">July 20, 2014</div>';
+        '<div class="specie-date">' + getDate(date) + ' ' + getMonthName(date) + ', ' + getYear(date) + '</div>';
     var myOptions = {
             content: boxText,
             disableAutoPan: false,

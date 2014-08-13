@@ -99,9 +99,32 @@ function getMonth(str) {
     return month;
 }
 
+function getMonthName(str) {
+    var number = parseInt(str.substring(4,6));
+    var month;
+    if (number === 1) {
+        month = "January";
+    }
+    else if (number === 2) {
+        month = "February";
+    }
+    else if (number === 3) {
+        month = "March";
+    }
+    else if (number === 4) {
+        month = "April";
+    }
+    return month;
+}
+
 function getDate(str) {
     var date = parseInt(str.substring(6,8));
     return date;
+}
+
+function getYear(str) {
+    var year = parseInt(str.substring(0, 4));
+    return year;
 }
 
 function showWeights(marker, map) {
