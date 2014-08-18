@@ -38,10 +38,10 @@ function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
     }
     
     if (slope === "y") {
-        slope = "yes";
+        slope = "Y";
     }
     else {
-        slope = "no";
+        slope = "N";
     }
     
     var boxText = document.createElement("div");
