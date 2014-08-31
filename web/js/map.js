@@ -140,57 +140,67 @@ function showWeights(marker, map) {
         }).responseText;
         
         var moduleObjectResponse = parseJSONObject(rawJSONResponse);
-        
-        var weights = [];
-        var moduleIDResp;
-        var moduleDepthResp;
-        var speciesResp;
-        var slopeResp;
-        var lifterWeightResp;
+        console.log(moduleObjectResponse);
+        console.log(moduleObjectResponse.moduleID);
+        if (moduleObjectResponse.moduleID === 0) {
+            alert("No module# " + marker.moduleID + " found");
+        }
+        else {
+            var weights = [];
+            var moduleIDResp;
+            var moduleDepthResp;
+            var speciesResp;
+            var slopeResp;
+            var lifterWeightResp;
 
-        $.each(moduleObjectResponse, function(key, value){
-            if (key === "weightsMap"){
-                $.each(moduleObjectResponse.weightsMap, function(keyWM, valueWM){
-                    weights.push([keyWM, valueWM]);
-                });
-            }
-            else {
-                if (key === "moduleID") {                    
-                    moduleIDResp = moduleObjectResponse.moduleID;                    
+            $.each(moduleObjectResponse, function(key, value){
+                if (key === "weightsMap"){
+                    $.each(moduleObjectResponse.weightsMap, function(keyWM, valueWM){
+                        weights.push([keyWM, valueWM]);
+                    });
                 }
-                else if (key === "moduleDepth") {
-                    moduleDepthResp = moduleObjectResponse.moduleDepth;
+                else {
+                    if (key === "moduleID") {                    
+                        moduleIDResp = moduleObjectResponse.moduleID;                    
+                    }
+                    else if (key === "moduleDepth") {
+                        moduleDepthResp = moduleObjectResponse.moduleDepth;
+                    }
+                    else if (key === "species") {
+                        speciesResp = moduleObjectResponse.species;
+                    }
+                    else if (key === "slope") {
+                        slopeResp = moduleObjectResponse.slope; 
+                    }
+                    else if (key === "lifterWeight") {
+                        lifterWeightResp = moduleObjectResponse.lifterWeight;
+                    }
                 }
-                else if (key === "species") {
-                    speciesResp = moduleObjectResponse.species;
-                }
-                else if (key === "slope") {
-                    slopeResp = moduleObjectResponse.slope; 
-                }
-                else if (key === "lifterWeight") {
-                    lifterWeightResp = moduleObjectResponse.lifterWeight;
-                }
-            }
-        });
+            });
+
+
+
+            weights.sort();
+            console.log(weights);
+            var latestDate = weights[weights.length - 1][0];
+            var latestWeight = weights[weights.length - 1][1];
+
+            if (infoBubble) {
+                infoBubble.close()
+            };
+
+            infoBubble = getInfoBubble(moduleObjectResponse.moduleID, moduleObjectResponse.species,
+                moduleObjectResponse.moduleDepth, moduleObjectResponse.slope, moduleObjectResponse.lifterWeight,
+                latestDate, latestWeight
+            );          
+
+            infoBubble.open(map, marker); 
+
+            google.maps.event.addListener(infoBubble, 'domready', function() {             
+                drawLineChart(weights); 
+            });
+        }
         
-        weights.sort();
-        var latestDate = weights[weights.length - 1][0];
-        var latestWeight = weights[weights.length - 1][1];
-        
-        if (infoBubble) {
-            infoBubble.close()
-        };
-        
-        infoBubble = getInfoBubble(moduleObjectResponse.moduleID, moduleObjectResponse.species,
-            moduleObjectResponse.moduleDepth, moduleObjectResponse.slope, moduleObjectResponse.lifterWeight,
-            latestDate, latestWeight
-        );          
-       
-        infoBubble.open(map, marker); 
-        
-        google.maps.event.addListener(infoBubble, 'domready', function() {             
-            drawLineChart(weights); 
-        });
     });
     
 }

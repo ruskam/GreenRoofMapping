@@ -17,7 +17,11 @@ var moduleList = [
     {latLng: [51.07995524, -114.129295], moduleID: 21},
     {latLng: [51.07995524, -114.1292803], moduleID: 22},
     {latLng: [51.07995524, -114.129265], moduleID: 23},
-    {latLng: [51.07995524, -114.129250], moduleID: 24}
+    {latLng: [51.07995524, -114.129250], moduleID: 24},
+    {latLng: [51.08, -114.12926], moduleID: 45},
+    {latLng: [51.08, -114.12928], moduleID: 44},
+    {latLng: [51.08, -114.12930], moduleID: 43},
+    {latLng: [51.08, -114.12932], moduleID: 37}
 ];
 //var moduleIDResp = "TEST";
 var infoBubble;

@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 /**
  *
@@ -54,6 +55,28 @@ public class ModuleDB {
         } catch (SQLException e) {            
             System.out.println(e);
             return null;
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+    }
+    
+    public static boolean moduleExists(int clientModuleID) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String query = "SELECT m.moduleid FROM modules as m WHERE m.moduleid = ?"; 
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, clientModuleID);
+            rs = ps.executeQuery();
+            System.out.println("rs.next() in ModuleDB: " + rs.next());
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
         } finally {
             DBUtil.closeResultSet(rs);
             DBUtil.closePreparedStatement(ps);
