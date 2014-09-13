@@ -47,15 +47,26 @@ public class BringJavaBean extends HttpServlet {
             while ((s = request.getReader().readLine()) != null) {
                 sb.append(s);
             }
+            
+            
             Module clientModule = gson.fromJson(sb.toString(), Module.class);
             
-            int clientModuleID = clientModule.getModuleID(); 
-            //System.out.println("clientModuleID: " + clientModuleID);
+            boolean exist = ModuleDB.moduleExists(clientModule.getModuleID());
+            System.out.println("boolean exists = " + exist);
+            int clientModuleID = (int)(clientModule.getModuleID()); 
+            System.out.println("ModuleDB.moduleExists(clientModule.getModuleID()): " + ModuleDB.moduleExists(clientModule.getModuleID()));
+            if (ModuleDB.moduleExists(clientModule.getModuleID())) {
+                System.out.println("Module #: " + clientModuleID + " exists");
+            }
+            else {
+                System.out.println("Module #: " + clientModuleID + " does NOT exists");
+            }
+            
             
             Module responseModule = ModuleDB.selectModule(clientModuleID);
-            System.out.println("module on servlet: " + responseModule.toString());
+            
             String jsonBean = new Gson().toJson(responseModule);
-               
+            System.out.println("--------------------------------------");   
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(jsonBean);

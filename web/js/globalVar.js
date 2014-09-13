@@ -10,6 +10,7 @@ var gIcon = new google.maps.MarkerImage("imgs/grass-marker.png", null, null, nul
 // js object to hold json response from the server
 //var moduleObjectResponse;
 // array to store coordinates and IDs of modules to create markers
+<<<<<<< HEAD
 var aqModuleList = [
     {latLng: [51.080004, -114.129290], moduleID: 2},
     {latLng: [51.079956, -114.129290], moduleID: 17},
@@ -51,6 +52,17 @@ var grassModuleList = [
     {latLng: [51.079981, -114.129220], moduleID: 10},
     {latLng: [51.079987, -114.129220], moduleID: 8},
     {latLng: [51.079993, -114.129220], moduleID: 1}
+=======
+var moduleList = [
+    {latLng: [51.07995524, -114.129295], moduleID: 21},
+    {latLng: [51.07995524, -114.1292803], moduleID: 22},
+    {latLng: [51.07995524, -114.129265], moduleID: 23},
+    {latLng: [51.07995524, -114.129250], moduleID: 24},
+    {latLng: [51.08, -114.12926], moduleID: 45},
+    {latLng: [51.08, -114.12928], moduleID: 44},
+    {latLng: [51.08, -114.12930], moduleID: 43},
+    {latLng: [51.08, -114.12932], moduleID: 37}
+>>>>>>> FETCH_HEAD
 ];
 var infoBubble;
 function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
@@ -69,10 +81,10 @@ function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
     }
     
     if (slope === "y") {
-        slope = "yes";
+        slope = "Y";
     }
     else {
-        slope = "no";
+        slope = "N";
     }
     
     var boxText = document.createElement("div");
