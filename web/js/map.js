@@ -60,7 +60,7 @@ function dialogUI() {
 	$('.open-disclaimer').click(function() { $('#disclaimer').dialog(options).dialog('open'); });
 	$('.open-about').click(function(){ $('#about').dialog(options).dialog('open'); });
 	$('.open-tutorial').click(function(){ $('#tutorial').dialog(options).dialog('open'); });
-	$('#lineGraph').dialog({width:'265', height:'240', dialogClass: 'dropShadow', position: { my: "left", at: "right+5", of: ".specie-popup" } });
+	$('#lineGraph').dialog({width:'265', height:'240', position: { my: "center", at: "center", of: ".specie-popup" } });
 }
 
 function drawLineChart(weights) {
@@ -211,22 +211,49 @@ function calgaryGreenRoof () {
     };
     var calgaryMap = new google.maps.Map(document.getElementById("map-canvas"), calgaryMapOptions);
     
-    for (var i = 0 in moduleList) {
-        var module = moduleList[i];
-        var latLng = new google.maps.LatLng(module.latLng[0], module.latLng[1]);
+    for (var i = 0 in aqModuleList) {
+        var aqModule = aqModuleList[i];
+        var latLng = new google.maps.LatLng(aqModule.latLng[0], aqModule.latLng[1]);
         //var marker = createMarker(latLng, module.moduleID[0], aIcon, calgaryMap);
-        var marker = new google.maps.Marker({
+        var aqMarker = new google.maps.Marker({
             position: latLng,
-            moduleID: module.moduleID,
+            moduleID: aqModule.moduleID,
             icon: aIcon,
             map: calgaryMap
         });
         
-        showWeights(marker, calgaryMap);
+        showWeights(aqMarker, calgaryMap);
+    }
+
+    for (var i = 0 in grassModuleList) {
+        var grassModule = grassModuleList[i];
+        var latLng = new google.maps.LatLng(grassModule.latLng[0], grassModule.latLng[1]);
+        //var marker = createMarker(latLng, module.moduleID[0], aIcon, calgaryMap);
+        var grassMarker = new google.maps.Marker({
+            position: latLng,
+            moduleID: grassModule.moduleID,
+            icon: gIcon,
+            map: calgaryMap
+        });
+        
+        showWeights(grassMarker, calgaryMap);
+    }
+
+    for (var i = 0 in sedumModuleList) {
+        var sedumModule = sedumModuleList[i];
+        var latLng = new google.maps.LatLng(sedumModule.latLng[0], sedumModule.latLng[1]);
+        var sedumMarker = new google.maps.Marker({
+            position: latLng,
+            moduleID: sedumModule.moduleID,
+            icon: sIcon,
+            map: calgaryMap
+        });
+         
+         showWeights(sedumMarker, calgaryMap);
     }
 	
     var yycStudyArea = [
-            new google.maps.LatLng(51.080024,-114.129298), new google.maps.LatLng(51.080024,-114.129241), new google.maps.LatLng(51.080016,-114.129241), new google.maps.LatLng(51.080016,-114.129231), new google.maps.LatLng(51.080005,-114.129231), new google.maps.LatLng(51.080005,-114.129213), new google.maps.LatLng(51.079971,-114.129213), new google.maps.LatLng(51.079971,-114.129232), new google.maps.LatLng(51.079961,-114.129232), new google.maps.LatLng(51.079961,-114.129240), new google.maps.LatLng(51.079951,-114.129240), new google.maps.LatLng(51.079951,-114.129315), new google.maps.LatLng(51.079951,-114.129322), new google.maps.LatLng(51.079960,-114.129322), new google.maps.LatLng(51.079960,-114.129330), new google.maps.LatLng(51.079972,-114.129330), new google.maps.LatLng(51.079972,-114.129347), new google.maps.LatLng(51.080006,-114.129347), new google.maps.LatLng(51.080006,-114.129330), new google.maps.LatLng(51.080016,-114.129330), new google.maps.LatLng(51.080020,-114.129316), new google.maps.LatLng(51.080024,-114.129316)
+            new google.maps.LatLng(51.080024,-114.129298), new google.maps.LatLng(51.080024,-114.129241), new google.maps.LatLng(51.080016,-114.129241), new google.maps.LatLng(51.080016,-114.129231), new google.maps.LatLng(51.080005,-114.129231), new google.maps.LatLng(51.080005,-114.129209), new google.maps.LatLng(51.079971,-114.129209), new google.maps.LatLng(51.079971,-114.129232), new google.maps.LatLng(51.079961,-114.129232), new google.maps.LatLng(51.079961,-114.129240), new google.maps.LatLng(51.079951,-114.129240), new google.maps.LatLng(51.079951,-114.129315), new google.maps.LatLng(51.079951,-114.129322), new google.maps.LatLng(51.079960,-114.129322), new google.maps.LatLng(51.079960,-114.129330), new google.maps.LatLng(51.079972,-114.129330), new google.maps.LatLng(51.079972,-114.129347), new google.maps.LatLng(51.080006,-114.129347), new google.maps.LatLng(51.080006,-114.129330), new google.maps.LatLng(51.080016,-114.129330), new google.maps.LatLng(51.080020,-114.129316), new google.maps.LatLng(51.080024,-114.129316)
     ];
     var polyOptions = {
             path: yycStudyArea,
@@ -234,7 +261,7 @@ function calgaryGreenRoof () {
             strokeOpacity: 0.4,
             strokeWeight: 4,
             fillColor: "#8560A8",
-            fillOpacity: 0.5
+            fillOpacity: 0.6
     };
     var studyAreaPoly = new google.maps.Polygon(polyOptions);
     studyAreaPoly.setMap(calgaryMap);

@@ -1,8 +1,3 @@
-//var map;
-
-//var londonMap;
-//var halfiaxMap;
-//var calgaryMarker;
 var greenRoofMarkers = [
     { "title": "Calgary", "lat": "51.08003234", "lng": "-114.12911475" },
     { "title": "London", "lat": "43.00761832871958", "lng": "-81.27059519290924" },
@@ -10,18 +5,54 @@ var greenRoofMarkers = [
 ];
 var greenRoofIcon = new google.maps.MarkerImage("imgs/map-pin.png", null, null, null, new google.maps.Size(21,34));
 var aIcon = new google.maps.MarkerImage("imgs/aquilegia-marker.png", null, null, null, new google.maps.Size(16,16));
+var sIcon = new google.maps.MarkerImage("imgs/sedum-marker.png", null, null, null, new google.maps.Size(16,16));
+var gIcon = new google.maps.MarkerImage("imgs/grass-marker.png", null, null, null, new google.maps.Size(16,16));
 // js object to hold json response from the server
 //var moduleObjectResponse;
 // array to store coordinates and IDs of modules to create markers
-var moduleList = [
-    {latLng: [51.07995524, -114.129295], moduleID: 21},
-    {latLng: [51.07995524, -114.1292803], moduleID: 22},
-    {latLng: [51.07995524, -114.129265], moduleID: 23},
-    {latLng: [51.07995524, -114.129250], moduleID: 24}
+var aqModuleList = [
+    {latLng: [51.080004, -114.129290], moduleID: 2},
+    {latLng: [51.079956, -114.129290], moduleID: 17},
+    {latLng: [51.079987, -114.129320], moduleID: 24},
+    {latLng: [51.079987, -114.129330], moduleID: 25}
 ];
-//var moduleIDResp = "TEST";
+var sedumModuleList = [
+    {latLng: [51.079998, -114.129290], moduleID: 26},
+    {latLng: [51.079998, -114.129280], moduleID: 27},
+    {latLng: [51.079998, -114.129270], moduleID: 28},
+    {latLng: [51.079975, -114.129250], moduleID: 29},
+    {latLng: [51.079981, -114.129250], moduleID: 30},
+    {latLng: [51.079987, -114.129250], moduleID: 31},
+    {latLng: [51.079964, -114.1292696], moduleID: 32},
+    {latLng: [51.079964, -114.129280], moduleID: 33},
+    {latLng: [51.079964, -114.129290], moduleID: 34},
+    {latLng: [51.079975, -114.129300], moduleID: 35},
+    {latLng: [51.079981, -114.129300], moduleID: 36},
+    {latLng: [51.079987, -114.129300], moduleID: 37}
+];
+var grassModuleList = [
+    {latLng: [51.080004, -114.129270], moduleID: 4},
+    {latLng: [51.080004, -114.129260], moduleID: 5},
+    {latLng: [51.079998, -114.129250], moduleID: 6},
+    {latLng: [51.079956, -114.129300], moduleID: 18},
+    {latLng: [51.079956, -114.129280], moduleID: 16},
+    {latLng: [51.079956, -114.129270], moduleID: 15},
+    {latLng: [51.079956, -114.129260], moduleID: 14},
+    {latLng: [51.079964, -114.129250], moduleID: 13},
+    {latLng: [51.079981, -114.129330], moduleID: 23},
+    {latLng: [51.079964, -114.129310], moduleID: 19},
+    {latLng: [51.079975, -114.129330], moduleID: 25},
+    {latLng: [51.079975, -114.129320], moduleID: 24},
+    {latLng: [51.079981, -114.129320], moduleID: 22},
+    {latLng: [51.079975, -114.129230], moduleID: 7},
+    {latLng: [51.079981, -114.129230], moduleID: 9},
+    {latLng: [51.079987, -114.129230], moduleID: 11},
+    {latLng: [51.079975, -114.129220], moduleID: 12},
+    {latLng: [51.079981, -114.129220], moduleID: 10},
+    {latLng: [51.079987, -114.129220], moduleID: 8},
+    {latLng: [51.079993, -114.129220], moduleID: 1}
+];
 var infoBubble;
-//var calgaryMap;
 function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
     
     if (species === "gr") {
