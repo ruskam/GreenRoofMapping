@@ -10,7 +10,6 @@ var gIcon = new google.maps.MarkerImage("imgs/grass-marker.png", null, null, nul
 // js object to hold json response from the server
 //var moduleObjectResponse;
 // array to store coordinates and IDs of modules to create markers
-<<<<<<< HEAD
 var aqModuleList = [
     {latLng: [51.080004, -114.129290], moduleID: 2},
     {latLng: [51.079956, -114.129290], moduleID: 17},
@@ -52,21 +51,9 @@ var grassModuleList = [
     {latLng: [51.079981, -114.129220], moduleID: 10},
     {latLng: [51.079987, -114.129220], moduleID: 8},
     {latLng: [51.079993, -114.129220], moduleID: 1}
-=======
-var moduleList = [
-    {latLng: [51.07995524, -114.129295], moduleID: 21},
-    {latLng: [51.07995524, -114.1292803], moduleID: 22},
-    {latLng: [51.07995524, -114.129265], moduleID: 23},
-    {latLng: [51.07995524, -114.129250], moduleID: 24},
-    {latLng: [51.08, -114.12926], moduleID: 45},
-    {latLng: [51.08, -114.12928], moduleID: 44},
-    {latLng: [51.08, -114.12930], moduleID: 43},
-    {latLng: [51.08, -114.12932], moduleID: 37}
->>>>>>> FETCH_HEAD
 ];
 var infoBubble;
 function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
-    
     if (species === "gr") {
         species = "Grass";
     }
@@ -88,8 +75,8 @@ function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
     }
     
     var boxText = document.createElement("div");
-            boxText.className = "specie-popup";
-            boxText.innerHTML = 
+        boxText.className = "specie-popup";
+        boxText.innerHTML = 
         '<div class="specie-bg">' + 
         '<div class="specie-name">Module #' + id + ': ' + species + '</div>' + '<div class="specie-depth">Depth: ' + depth + /*moduleIDResp +*/ '</div>' +
         '<div class="specie-weight-holder"><div class="specie-weight">' + weight + '</div><div class="specie-unit">kg</div></div>' +
@@ -101,17 +88,17 @@ function getInfoBubble(id, species, depth, slope, lifterWeight, date, weight) {
         '<div id="lineGraph" title="Trends"><canvas id="chartjs" width="230" height="172"></canvas></div>' +
         '<div class="specie-date">' + getDate(date) + ' ' + getMonthName(date) + ', ' + getYear(date) + '</div>';
     var myOptions = {
-            content: boxText,
-            disableAutoPan: false,
-            alignBottom: true,
-            pixelOffset: new google.maps.Size(-115, -35),
-            zIndex: null,
-            closeBoxMargin: "21px 13px 0px",
-            closeBoxURL: "imgs/close-button.png",
-            infoBoxClearance: new google.maps.Size(1, 1),
-            isHidden: false,
-            pane: "floatPane",
-            enableEventPropagation: false
+        content: boxText,
+        disableAutoPan: false,
+        alignBottom: true,
+        pixelOffset: new google.maps.Size(-115, -35),
+        zIndex: null,
+        closeBoxMargin: "21px 13px 0px",
+        closeBoxURL: "imgs/close-button.png",
+        infoBoxClearance: new google.maps.Size(1, 1),
+        isHidden: false,
+        pane: "floatPane",
+        enableEventPropagation: false
     };
     var infoBubble = new InfoBox(myOptions);
     return infoBubble;

@@ -1,5 +1,4 @@
 function initialize() {
-    
     var mapCenter = new google.maps.LatLng(56.306786, -88.769531);
     
     var maxZoomOut = 4;
@@ -53,8 +52,6 @@ function initialize() {
     }
 }
 
-
-
 function dialogUI() {
 	var options = { autoOpen: false, modal: true, width: '50%', height: 'auto', resizable: false, closeOnEscape: true, dialogClass: 'dropShadow' };
 	$('.open-disclaimer').click(function() { $('#disclaimer').dialog(options).dialog('open'); });
@@ -64,7 +61,6 @@ function dialogUI() {
 }
 
 function drawLineChart(weights) {
-    
     var lineChartData = {
         labels: [getDate(weights[0][0]).toString().concat("/",getMonth(weights[0][0]).toString()), 
             getDate(weights[1][0]).toString().concat("/",getMonth(weights[1][0]).toString()), 
@@ -128,7 +124,6 @@ function getYear(str) {
 }
 
 function showWeights(marker, map) {
-    
     google.maps.event.addListener(marker, 'click', function() {
         
         var rawJSONResponse = $.ajax({
@@ -177,8 +172,6 @@ function showWeights(marker, map) {
                     }
                 }
             });
-
-
 
             weights.sort();
             console.log(weights);
