@@ -2,6 +2,12 @@ Magna Systems
 ================
 *Magna* (Latin for “monitoring”) Systems is a Google Maps API powered web mapping application for monitoring various plant species that are part of green roofs on the campuses of the University of Calgary, University of Western Ontario, and Dalhousie University. Currently, this web app is limited to University of Calgary due to data availability, but our vision is to expand this to other green roofs on research campuses across Canada.
 
+Magna Systems uses back-end technologies such as Java EE (Apache Tomcat) and PostgreSQL (PostGIS) to store the data. We also use front-end technologies such as HTML5, CSS3, JavaScript, jQuery UI to display the data in a user-friendly manner.
+
+###### Developers
+[ruskam](https://github.com/ruskam)  
+[beekay-](https://github.com/beekay-)
+
 #### Initial Screen
 ![Magna Systems - Initial Screen](http://cl.ly/image/1s0Q2Y1j2a3A/magna-sys-1.png)
 
