@@ -4,9 +4,7 @@ Magna Systems
 
 Magna Systems uses back-end technologies such as Java EE (Apache Tomcat) and PostgreSQL (PostGIS) to store the data. We also use front-end technologies such as HTML5, CSS3, JavaScript, jQuery UI to display the data in a user-friendly manner.
 
-###### Developers
-[ruskam](https://github.com/ruskam)  
-[beekay-](https://github.com/beekay-)
+**Developed by** [ruskam](https://github.com/ruskam) & [beekay-](https://github.com/beekay-)
 
 #### Initial Screen
 ![Magna Systems - Initial Screen](http://cl.ly/image/1s0Q2Y1j2a3A/magna-sys-1.png)
